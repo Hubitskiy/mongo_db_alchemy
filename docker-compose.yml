@@ -7,6 +7,8 @@ services:
       context: .
       dockerfile: compose/celery/Dockerfile
     container_name: notebook
+    env_file:
+      - ./envs/db_keys
     ports:
       - "8888:8888"
     volumes:
