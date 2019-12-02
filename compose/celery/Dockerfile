@@ -70,5 +70,7 @@ RUN pip3 install sqlparse
 RUN pip3 install vine
 RUN pip3 install sqlalchemy
 RUN pip3 install psycopg2
+RUN pip3 install peewee
+RUN pip3 install pymongo
 
 WORKDIR /src/
