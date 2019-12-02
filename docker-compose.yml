@@ -15,6 +15,7 @@ services:
       - ./src:/src
     env_file:
       - ./envs/db_keys
+      - ./envs/mongo_keys
     command : ["sh", "-c", "celery worker --app=birthdays --loglevel=info"]
 
   jupyter:
@@ -24,6 +25,7 @@ services:
     container_name: notebook
     env_file:
       - ./envs/db_keys
+      - ./envs/mongo_keys
     ports:
       - "8888:8888"
     volumes:
@@ -31,11 +33,11 @@ services:
     depends_on:
       - db
       - redis
+      - mongo
     command : ["sh", "-c", "jupyter notebook --allow-root --ip 0.0.0.0 --port 8888"]
 
   db:
     image: postgres
-    restart: always
     container_name: postgres
     env_file:
       - ./envs/db_keys
@@ -45,7 +47,6 @@ services:
 
   adminer:
     image: adminer
-    restart: always
     container_name: admin
     ports:
       - "8080:8080"
@@ -58,17 +59,13 @@ services:
 
   mongo:
     image: mongo
-    restart: always
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+    env_file:
+      - ./envs/mongo_keys
 
   mongo-express:
     image: mongo-express
-    restart: always
     ports:
       - 8081:8081
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+    env_file:
+      - ./envs/mongo_keys
 
