@@ -1,7 +1,22 @@
-version: "3.1"
+version: "3.2"
 
 
 services:
+  calery_w:
+    build:
+      context: .
+      dockerfile: compose/celery/Dockerfile
+    container_name: worker
+    depends_on:
+      - redis
+      - db
+      - mongo
+    volumes:
+      - ./src:/src
+    env_file:
+      - ./envs/db_keys
+    command : ["sh", "-c", "celery worker --app=birthdays --loglevel=info"]
+
   jupyter:
     build:
       context: .
