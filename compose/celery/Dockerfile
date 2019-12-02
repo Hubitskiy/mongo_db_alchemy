@@ -55,6 +55,20 @@ RUN apt-get install -y \
     autoconf \
     autotools-dev
 
+RUN echo "y" | apt install python-psycopg2
+RUN echo "y" | apt install libpq-dev python-dev
+
 RUN pip3 install jupyter
+RUN pip3 install amqp
+RUN pip3 install billiard
+RUN pip3 install celery
+RUN pip3 install kombu
+RUN pip3 install pillow
+RUN pip3 install pytz
+RUN pip3 install redis
+RUN pip3 install sqlparse
+RUN pip3 install vine
+RUN pip3 install sqlalchemy
+RUN pip3 install psycopg2
 
 WORKDIR /src/
