@@ -66,6 +66,7 @@ services:
     image: mongo-express
     ports:
       - 8081:8081
-    env_file:
-      - ./envs/mongo_keys
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
 
