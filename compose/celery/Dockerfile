@@ -72,5 +72,6 @@ RUN pip3 install sqlalchemy
 RUN pip3 install psycopg2
 RUN pip3 install peewee
 RUN pip3 install pymongo
+RUN pip3 install pandas
 
 WORKDIR /src/
