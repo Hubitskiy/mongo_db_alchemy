@@ -1,4 +1,4 @@
-version: "3.2"
+version: "3.4"
 
 
 services:
@@ -16,13 +16,13 @@ services:
     env_file:
       - ./envs/db_keys
       - ./envs/mongo_keys
-    command : ["sh", "-c", "celery worker --app=birthdays --loglevel=info"]
+    command : ["sh", "-c", "celery -A birthdays worker --loglevel=INFO"]
 
   jupyter:
     build:
       context: .
       dockerfile: compose/celery/Dockerfile
-    container_name: notebook
+    container_name: notebook 
     env_file:
       - ./envs/db_keys
       - ./envs/mongo_keys
