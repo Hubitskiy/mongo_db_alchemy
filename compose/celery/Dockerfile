@@ -1,5 +1,10 @@
 FROM ubuntu:18.04
 
+ARG UNAME=celeryuser
+ARG UID=1000
+ARG GID=1000
+RUN groupadd -g $GID -o $UNAME
+RUN useradd -m -u $UID -g $GID -o -s /bin/bash $UNAME
 
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
@@ -73,5 +78,7 @@ RUN pip3 install psycopg2
 RUN pip3 install peewee
 RUN pip3 install pymongo
 RUN pip3 install pandas
+
+USER $UNAME
 
 WORKDIR /src/
