@@ -62,8 +62,6 @@ services:
     container_name: mongo_db
     env_file:
       - ./envs/mongo_keys
-    volumes:
-      - ./mongo_data:/data/db
 
   mongo-express:
     image: mongo-express
