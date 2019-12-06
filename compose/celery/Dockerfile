@@ -34,8 +34,6 @@ RUN apt-get install -y \
     libavcodec-dev \
     zlib1g-dev
 
-RUN pip3 install cython kivy
-
 RUN apt-get install -y \
     git \
     zip \
@@ -63,21 +61,8 @@ RUN apt-get install -y \
 RUN echo "y" | apt install python-psycopg2
 RUN echo "y" | apt install libpq-dev python-dev
 
-RUN pip3 install jupyter
-RUN pip3 install amqp
-RUN pip3 install billiard
-RUN pip3 install celery
-RUN pip3 install kombu
-RUN pip3 install pillow
-RUN pip3 install pytz
-RUN pip3 install redis
-RUN pip3 install sqlparse
-RUN pip3 install vine
-RUN pip3 install sqlalchemy
-RUN pip3 install psycopg2
-RUN pip3 install peewee
-RUN pip3 install pymongo
-RUN pip3 install pandas
+COPY ./requirements.txt /scripts/
+RUN pip3 install --no-cache-dir -r /scripts/requirements.txt
 
 USER $UNAME
 
