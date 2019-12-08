@@ -2,17 +2,16 @@ from celery import Celery
 from time import sleep
 from random import shuffle
 import os
-#celery -A birthdays worker --pool=solo --loglevel=info      рабочие процессы
-#celery -A birthdays beat -l info                            планировщик ритмов
+
 
 app = Celery(
     'birthdays', 
-    broker = 'redis://redis:6379/0'
+    #broker = 'redis://redis:6379/0',
+    #backend = 'redis://redis:6379/0'
+    broker = 'amqp://rabbitmq:rabbitmq@rabbit:5672',
+    backend = 'amqp://rabbitmq:rabbitmq@rabbit:5672'
     )
 
-app.conf.update(
-    result_backend = 'redis://redis:6379/0'
-    )
 
 @app.task
 def hello_world():

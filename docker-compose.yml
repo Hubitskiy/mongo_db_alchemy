@@ -8,16 +8,23 @@ services:
       dockerfile: compose/celery/Dockerfile
     container_name: worker
     depends_on:
-      - redis
       - db
       - mongo
+      - redis
+      - rabbit
     volumes:
       - ./src:/src
     env_file:
       - ./envs/db_keys
       - ./envs/mongo_keys
-    command : ["sh", "-c", "celery -A birthdays worker --loglevel=INFO"]
-
+      - ./envs/rabbit_keys
+    links:
+      - rabbit
+    command : ["sh", "-c", "celery -A birthdays worker -P prefork -c 12 -l info"]
+# solo - Сольный пул работает внутри рабочего процесса
+# prefork - обойти глобальную блокировку интерпретатора python и юзать все ядра системы
+# eventlet(задачи IO) и gevent - порождает потоки выполнения (необходимо в --concurreny указать колличество рабтников)
+# -c - определяет колличество потоков/процессов
   jupyter:
     build:
       context: .
@@ -26,6 +33,7 @@ services:
     env_file:
       - ./envs/db_keys
       - ./envs/mongo_keys
+      - ./envs/rabbit_keys
     ports:
       - "8888:8888"
     volumes:
@@ -51,12 +59,6 @@ services:
     ports:
       - "8080:8080"
 
-  redis:
-    image: redis:3.2-alpine
-    container_name: redis_db
-    volumes:
-      - ./redis_data:/data
-
   mongo:
     image: mongo
     container_name: mongo_db
@@ -72,3 +74,17 @@ services:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: example
 
+  redis:
+    image: redis:3.2-alpine
+    container_name: redis_db
+    volumes:
+      - ./redis_data:/data
+
+  rabbit:
+    image: rabbitmq:3-management
+    container_name: rabbitMQ
+    env_file:
+      - ./envs/rabbit_keys
+    ports:
+      - "15672:15672"
+      - "5672:5672"
