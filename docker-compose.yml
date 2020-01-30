@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: compose/celery/Dockerfile
-    container_name: worker
+    container_name: worker_mongo
     depends_on:
       - db
       - mongo
@@ -29,7 +29,7 @@ services:
     build:
       context: .
       dockerfile: compose/celery/Dockerfile
-    container_name: notebook 
+    container_name: notebook_web
     env_file:
       - ./envs/db_keys
       - ./envs/mongo_keys
@@ -46,7 +46,7 @@ services:
 
   db:
     image: postgres
-    container_name: postgres_db
+    container_name: postgres_db_mongo
     env_file:
       - ./envs/db_keys
     volumes:
@@ -55,19 +55,19 @@ services:
 
   adminer:
     image: adminer
-    container_name: psql_admin
+    container_name: psql_admin_mongo
     ports:
       - "8080:8080"
 
   mongo:
     image: mongo
-    container_name: mongo_db
+    container_name: mongo_db_mongo
     env_file:
       - ./envs/mongo_keys
 
   mongo-express:
     image: mongo-express
-    container_name: mongo_admin
+    container_name: mongo_admin_mongo
     ports:
       - 8081:8081
     environment:
@@ -76,13 +76,13 @@ services:
 
   redis:
     image: redis:3.2-alpine
-    container_name: redis_db
+    container_name: redis_db_mongo
     volumes:
       - ./redis_data:/data
 
   rabbit:
     image: rabbitmq:3-management
-    container_name: rabbitMQ
+    container_name: rabbitMQ_mongo
     env_file:
       - ./envs/rabbit_keys
     ports:
